@@ -234,7 +234,7 @@ const drift = (x: number, y: number) =>
     </section>
 
     <!-- Companies -->
-    <section v-if="companies.length" id="companies" class="relative mt-28 bg-navy text-paper" style="border-top-left-radius: clamp(3rem, 9vw, 8rem); border-bottom-right-radius: clamp(3rem, 9vw, 8rem)">
+    <section id="companies" class="relative mt-28 bg-navy text-paper" style="border-top-left-radius: clamp(3rem, 9vw, 8rem); border-bottom-right-radius: clamp(3rem, 9vw, 8rem)">
       <div class="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
         <div class="flex flex-wrap items-end justify-between gap-6">
           <h2 v-reveal class="display text-[clamp(4rem,9vw,7.5rem)]">
@@ -243,11 +243,17 @@ const drift = (x: number, y: number) =>
           <p v-reveal="100" class="max-w-md text-lg text-paper/80">{{ t('companies.intro') }}</p>
         </div>
 
-        <ul class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <ul v-if="companies.length" class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <li v-for="(c, i) in companies" :key="c.key" v-reveal="{ delay: (i % 4) * 90, variant: 'scale' }">
             <CompanyTile :company="c" :active="company === c.key" @select="selectCompany" />
           </li>
         </ul>
+
+        <div v-else v-reveal class="corner-tr mt-14 grid gap-4 bg-paper/10 p-8 md:p-12">
+          <p class="heading text-4xl md:text-5xl">{{ t('companies.emptyTitle') }}</p>
+          <p class="max-w-xl text-lg text-paper/80">{{ t('companies.emptyText') }}</p>
+          <NuxtLink to="/submit" class="btn btn-paper mt-2 w-fit">{{ t('showcases.emptyCta') }} <UiIcon name="arrow" :size="18" class="arrow" /></NuxtLink>
+        </div>
       </div>
     </section>
 

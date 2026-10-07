@@ -64,6 +64,9 @@ const nl = {
   companies: {
     title: ['Waar alumni', 'werken'],
     intro: 'Samengesteld uit de showcases. Kies een bedrijf om te zien wat Avans ICT-alumni daar hebben gebouwd.',
+    emptyTitle: 'Nog geen bedrijven',
+    emptyText:
+      'Dit overzicht vult zich vanzelf: zodra een showcase is goedgekeurd, verschijnt het bedrijf waar de alumnus werkt hier.',
     showcaseCount: '{n} showcase|{n} showcases',
     alumniCount: '{n} alumnus|{n} alumni',
   },
@@ -177,7 +180,7 @@ const nl = {
     thanks: 'Bedankt!',
     thanksName: 'Bedankt, {name}!',
     thanksText:
-      'Je showcase is onderweg. We bekijken elke inzending en zodra die is goedgekeurd verschijnt hij op de site.',
+      'Je showcase is onderweg. We bekijken elke inzending. Zodra die is goedgekeurd verschijnt hij op de site en staat jouw bedrijf bij Waar alumni werken.',
     back: 'Terug naar de showcases',
     another: 'Nog een insturen',
     fixFields: 'Controleer de gemarkeerde velden.',
@@ -255,7 +258,7 @@ const nl = {
     contactPreference: 'Voorkeur',
     privateEmail: 'Privé e-mail',
     toast: {
-      approved: 'Showcase goedgekeurd',
+      approved: 'Showcase goedgekeurd. {company} staat nu bij Bedrijven.',
       rejected: 'Showcase afgewezen',
       restored: 'Showcase teruggezet naar in afwachting',
       featured: 'Showcase uitgelicht',

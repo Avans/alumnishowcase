@@ -66,6 +66,9 @@ const en: Messages = {
   companies: {
     title: ['Where alumni', 'work'],
     intro: 'Distilled from the showcases. Pick a company to see what Avans ICT alumni built there.',
+    emptyTitle: 'No companies yet',
+    emptyText:
+      'This fills up by itself: as soon as a showcase is approved, the company where the alumnus works shows up here.',
     showcaseCount: '{n} showcase|{n} showcases',
     alumniCount: '{n} alum|{n} alumni',
   },
@@ -177,7 +180,7 @@ const en: Messages = {
     thanks: 'Thank you!',
     thanksName: 'Thank you, {name}!',
     thanksText:
-      'Your showcase is on its way. We review every submission and it will appear on the site as soon as it is approved.',
+      'Your showcase is on its way. We review every submission. As soon as it is approved it appears on the site and your company is listed under Where alumni work.',
     back: 'Back to the showcase',
     another: 'Submit another',
     fixFields: 'Please check the highlighted fields.',
@@ -255,7 +258,7 @@ const en: Messages = {
     contactPreference: 'Preference',
     privateEmail: 'Private email',
     toast: {
-      approved: 'Showcase approved',
+      approved: 'Showcase approved. {company} is now listed under Companies.',
       rejected: 'Showcase rejected',
       restored: 'Showcase moved back to pending',
       featured: 'Showcase featured',

@@ -43,7 +43,7 @@ async function update(item: AdminShowcase, patch: Partial<Pick<Showcase, 'status
     Object.assign(item, previous)
     push(t('admin.toast.failed'), 'error')
   } else {
-    push(t(`admin.toast.${toast}`), 'success')
+    push(t(`admin.toast.${toast}`, { company: item.company }), 'success')
   }
 }
 
