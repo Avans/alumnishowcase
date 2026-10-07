@@ -17,7 +17,7 @@ A showcase for Avans ICT alumni: alumni submit a case (image, links, short descr
 ### Privacy: who sees the contact email?
 
 * The alumnus' **email is never shown publicly.** It lives in its own table, `showcase_contacts`, which has **no public policy**: only an admin can read it (Row Level Security).
-* On the site, an alumnus picks a *preferred contact* (LinkedIn, website or email). For "email", visitors get a **Request an intro** button that mails the admin address instead.
+* On the site, an alumnus can share a *preferred contact link* (LinkedIn or website). It is **optional**: without a link (or with the email option), visitors get a **Request an intro** button that mails the admin address instead.
 * Admins see the private email in `/admin` and on the case page, **hidden behind a reveal button** by default.
 * Admin = a **confirmed** email on the `public.admins` allow-list (seeded with `s.vandockum@avans.nl`). The database decides, not the client. To add admins, insert into that table.
 * Submissions start as `pending` and only appear after approval. Spam defences: server-side validation, image type sniffing + 5 MB cap, per-IP rate limit (in memory, per instance), honeypot and time-to-fill check.
@@ -44,6 +44,18 @@ Then, once:
 2. **Auth → URL Configuration:** set the *Site URL* to your production URL and add `https://<your-domain>/confirm` (and `http://localhost:3000/confirm`) to *Redirect URLs*.
 3. Optional hardening: Auth → Sign In / Providers → Email, switch off *Allow new users to sign up*. The admin user already exists and the site never needs public accounts.
 4. Environment variables for hosting: `SUPABASE_URL`, `SUPABASE_KEY` (publishable/anon) and `SUPABASE_SECRET_KEY` (or the legacy `SUPABASE_SERVICE_KEY`). The service key is **server only**.
+
+### Deploying (Vercel)
+
+Set these in *Project → Settings → Environment Variables* for **Production** (and Preview if you use it), then **redeploy**. Vercel only applies new or changed variables to new deployments, so adding one to a live deployment changes nothing until you redeploy.
+
+| Variable | Value |
+| --- | --- |
+| `SUPABASE_URL` | `https://<project-ref>.supabase.co` |
+| `SUPABASE_KEY` | publishable (anon) key |
+| `SUPABASE_SECRET_KEY` | secret key. The legacy `service_role` key also works as `SUPABASE_SERVICE_KEY` / `SUPABASE_SERVICE_ROLE_KEY`. |
+
+The server key is read when a request arrives, so it never ends up in the build. If submitting fails, check *Deployments → Logs* for a line starting with `[supabase] Cannot create the admin client`; it names the variables it looks for. Uploads are capped at 4 MB because Vercel rejects request bodies over about 4.5 MB.
 
 ### Local Supabase (with demo data)
 

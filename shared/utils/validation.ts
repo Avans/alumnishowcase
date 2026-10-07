@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 export const MAX_LINKS = 6
 export const MAX_TAGS = 5
-export const MAX_IMAGE_BYTES = 5 * 1024 * 1024
+// Hosts like Vercel reject request bodies above ~4.5 MB, so stay safely below it.
+export const MAX_IMAGE_BYTES = 4 * 1024 * 1024
 export const SUMMARY_MAX = 280
 
 /** [min, max] per field. Also used to fill {min}/{max} in translated messages. */
@@ -86,9 +87,10 @@ export const submissionSchema = z
     consent: z.literal(true, 'consent.required'),
   })
   .superRefine((val, ctx) => {
-    if (val.contactMethod === 'email') return
+    // The link is optional: without one, visitors reach the alumnus via the admin.
+    if (val.contactMethod === 'email' || !val.contactUrl) return
 
-    const parsed = httpUrl('contactUrl').safeParse(val.contactUrl ?? '')
+    const parsed = httpUrl('contactUrl').safeParse(val.contactUrl)
     if (!parsed.success) {
       ctx.addIssue({ code: 'custom', path: ['contactUrl'], message: parsed.error.issues[0]!.message })
       return

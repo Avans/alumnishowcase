@@ -387,9 +387,13 @@ const methods = computed(() => [
 
             <Transition enter-active-class="transition duration-500 ease-out-expo" enter-from-class="-translate-y-2 opacity-0" mode="out-in">
               <div v-if="form.contactMethod !== 'email'" :key="form.contactMethod">
-                <label class="field-label" for="contact-url">{{ form.contactMethod === 'linkedin' ? t('submit.linkedinLabel') : t('submit.websiteLabel') }}</label>
-                <input id="contact-url" v-model="form.contactUrl" type="url" inputmode="url" class="field" :placeholder="form.contactMethod === 'linkedin' ? 'https://www.linkedin.com/in/your-name' : 'https://'" :aria-invalid="!!errors.contactUrl" />
+                <label class="field-label" for="contact-url">
+                  {{ form.contactMethod === 'linkedin' ? t('submit.linkedinLabel') : t('submit.websiteLabel') }}
+                  <span class="font-medium text-muted">{{ t('submit.optional') }}</span>
+                </label>
+                <input id="contact-url" v-model="form.contactUrl" type="url" inputmode="url" class="field" :placeholder="form.contactMethod === 'linkedin' ? t('submit.linkedinPlaceholder') : 'https://'" :aria-invalid="!!errors.contactUrl" />
                 <p v-if="errors.contactUrl" class="field-error" role="alert">{{ errors.contactUrl }}</p>
+                <p v-else class="field-hint">{{ t('submit.contactUrlHint') }}</p>
               </div>
               <p v-else key="email" class="rounded-2xl bg-sunken p-4 text-sm font-medium">
                 {{ t('submit.emailNote') }}
@@ -398,7 +402,7 @@ const methods = computed(() => [
 
             <div class="corner-tr bg-yellow p-6">
               <label class="field-label flex items-center gap-2" for="email"><UiIcon name="lock" :size="16" /> {{ t('submit.emailLabel') }} <span class="font-medium">{{ t('submit.emailPrivate') }}</span></label>
-              <input id="email" v-model="form.contactEmail" type="email" class="field" autocomplete="email" maxlength="254" placeholder="you@example.com" :aria-invalid="!!errors.contactEmail" />
+              <input id="email" v-model="form.contactEmail" type="email" class="field" autocomplete="email" maxlength="254" :placeholder="t('submit.emailPlaceholder')" :aria-invalid="!!errors.contactEmail" />
               <p v-if="errors.contactEmail" class="field-error" role="alert">{{ errors.contactEmail }}</p>
               <p v-else class="field-hint !text-ink/70">{{ t('submit.emailHint', { admin: config.public.adminContactEmail }) }}</p>
             </div>

@@ -60,6 +60,7 @@ watch(
   { immediate: true },
 )
 
+const hasPublicLink = computed(() => s.value.contact_method !== 'email' && /^https?:\/\//i.test(s.value.contact_url ?? ''))
 const contactLabel = computed(() => t(`contactMethod.${s.value.contact_method}`))
 </script>
 
@@ -153,10 +154,10 @@ const contactLabel = computed(() => t(`contactMethod.${s.value.contact_method}`)
             </dl>
 
             <div class="mt-8 border-t-2 border-ink/15 pt-6">
-              <p class="eyebrow mb-3 opacity-70">{{ t('detail.preferredContact', { method: contactLabel }) }}</p>
+              <p class="eyebrow mb-3 opacity-70">{{ hasPublicLink ? t('detail.preferredContact', { method: contactLabel }) : t('detail.contactViaAvans') }}</p>
 
               <a
-                v-if="s.contact_method !== 'email' && s.contact_url && /^https?:\/\//i.test(s.contact_url)"
+                v-if="hasPublicLink && s.contact_url"
                 :href="s.contact_url"
                 target="_blank"
                 rel="noopener noreferrer"

@@ -1,5 +1,4 @@
 import { randomBytes, randomUUID } from 'node:crypto'
-import { serverSupabaseServiceRole } from '#supabase/server'
 import { MAX_IMAGE_BYTES, slugify, submissionSchema } from '#shared/utils/validation'
 
 const BUCKET = 'showcase-images'
@@ -17,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   const declaredLength = Number(getHeader(event, 'content-length') ?? 0)
   if (declaredLength > MAX_IMAGE_BYTES + 256 * 1024) {
-    throw createError({ statusCode: 413, message: 'That image is too large. Please keep it under 5 MB.', data: { code: 'imageTooBig' } })
+    throw createError({ statusCode: 413, message: 'That image is too large. Please keep it under 4 MB.', data: { code: 'imageTooBig' } })
   }
 
   const parts = await readMultipartFormData(event)
@@ -51,14 +50,18 @@ export default defineEventHandler(async (event) => {
   const input = parsed.data
 
   if (imagePart.data.length > MAX_IMAGE_BYTES) {
-    throw createError({ statusCode: 413, message: 'That image is too large. Please keep it under 5 MB.', data: { code: 'imageTooBig' } })
+    throw createError({ statusCode: 413, message: 'That image is too large. Please keep it under 4 MB.', data: { code: 'imageTooBig' } })
   }
   const kind = IMAGE_TYPES.find((t) => t.test(imagePart.data))
   if (!kind) {
     throw createError({ statusCode: 415, message: 'Please upload a JPEG, PNG, WebP or AVIF image.', data: { code: 'imageType' } })
   }
 
-  const supabase = serverSupabaseServiceRole(event)
+  // Without a public link there is nothing to show, so contact goes via the admin.
+  const contactUrl = input.contactMethod === 'email' ? null : (input.contactUrl ?? null)
+  const contactMethod = contactUrl ? input.contactMethod : 'email'
+
+  const supabase = useSupabaseAdmin(event)
 
   const imagePath = `${new Date().getUTCFullYear()}/${randomUUID()}.${kind.ext}`
   const upload = await supabase.storage.from(BUCKET).upload(imagePath, imagePart.data, {
@@ -95,8 +98,8 @@ export default defineEventHandler(async (event) => {
         alumni_role: input.alumniRole ?? null,
         programme: input.programme ?? null,
         graduation_year: input.graduationYear ?? null,
-        contact_method: input.contactMethod,
-        contact_url: input.contactMethod === 'email' ? null : (input.contactUrl ?? null),
+        contact_method: contactMethod,
+        contact_url: contactUrl,
       })
       .select('id')
       .single()
